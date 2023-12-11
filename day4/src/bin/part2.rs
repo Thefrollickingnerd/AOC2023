@@ -12,21 +12,21 @@ fn main() {
 fn part2(input: &str) -> u32 {
     let (_, cards) = parse_cards(input).expect("Should have cards");
     let mut card_counter = HashMap::new();
-    let v: Vec<_> = cards
-                    .iter().map(|card| {
-                        let id = card.id.clone();
-                        card_counter.entry(id).and_modify(|id| *id += 1).or_insert(1);
-                        
-                        let multiplier = card_counter.get(&id).expect("Should exist").clone();
-                        
-                        let n_draws = card.draws.iter().filter(|d| card.winners.contains(d)).count();
-                        for i in 1..=n_draws {
-                            card_counter.entry(id + i as u32)
-                                        .and_modify(|ind| *ind += multiplier)
-                                        .or_insert(multiplier);
-                        }
-                    }).collect();
-    card_counter.values().sum()
+    cards
+        .iter().map(|card| {
+            let id = card.id.clone();
+            card_counter.entry(id).and_modify(|id| *id += 1).or_insert(1);
+            
+            let multiplier = card_counter.get(&id).expect("Should exist").clone();
+            
+            let n_draws = card.draws.iter().filter(|d| card.winners.contains(d)).count();
+            for i in 1..=n_draws {
+                card_counter.entry(id + i as u32)
+                            .and_modify(|ind| *ind += multiplier)
+                            .or_insert(multiplier);
+            }
+        multiplier
+        }).sum()
 }
 
 #[cfg(test)]
