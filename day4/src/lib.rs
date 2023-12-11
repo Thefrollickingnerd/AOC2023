@@ -14,9 +14,10 @@ pub struct Card {
 }
 
 fn card(input: &str) -> IResult<&str, Card> {
-    let (input, _) = tag("Card")(input)?;
-    let (input, id) = preceded(multispace1, complete::u32)(input)?;
-    let (input, _) = tag(":")(input)?;
+    let (input, id) = delimited(
+        tag("Card"),
+        preceded(multispace1, complete::u32), 
+        tag(":"))(input)?;
     let (input, _) = multispace1(input)?;
     let (input, (winners, draws)) = 
         separated_pair(
